@@ -55,24 +55,48 @@ class PolynomialSolver {
         this.reduceEquation();
     }
 
-        // Reduce the equation to its simplified form
-        reduceEquation(): void {
-            const reducedTerms: { [exponent: number]: number } = {};
-    
-            this.terms.forEach((term) => {
-                if (reducedTerms[term.exponent] !== undefined) {
-                    reducedTerms[term.exponent] += term.coefficient;
-                } else {
-                    reducedTerms[term.exponent] = term.coefficient;
-                }
-            });
-    
-            this.terms = Object.keys(reducedTerms)
-                .map((exp) => ({
-                    coefficient: reducedTerms[parseInt(exp)],
-                    exponent: parseInt(exp),
-                }))
-                .filter((term) => term.coefficient !== 0 || term.exponent === 0);
-    
-        }
+    // Reduce the equation to its simplified form
+    reduceEquation(): void {
+        const reducedTerms: { [exponent: number]: number } = {};
+
+        this.terms.forEach((term) => {
+            if (reducedTerms[term.exponent] !== undefined) {
+                reducedTerms[term.exponent] += term.coefficient;
+            } else {
+                reducedTerms[term.exponent] = term.coefficient;
+            }
+        });
+
+        this.terms = Object.keys(reducedTerms)
+            .map((exp) => ({
+                coefficient: reducedTerms[parseInt(exp)],
+                exponent: parseInt(exp),
+            }))
+            .filter((term) => term.coefficient !== 0 || term.exponent === 0);
+
+        this.printReducedForm();
+    }
+
+    // Print the reduced form of the equation
+    printReducedForm(): void {
+        const reducedForm = this.terms
+            .map((term) => {
+                const sign = term.coefficient < 0 ? "-" : "+";
+                const absCoefficient = Math.abs(term.coefficient);
+                return `${sign} ${absCoefficient} * X^${term.exponent}`;
+            })
+            .join(" ")
+            .replace(/\+ -/g, "- ")
+            .trim()
+            .replace(/^\+/, ""); // Remove leading +
+
+        console.log(`Reduced form: ${reducedForm || "0"} = 0`);
+    }
+
+    // Find the degree of the polynomial
+    getDegree(): number {
+        const degree = Math.max(...this.terms.map((term) => term.exponent));
+        console.log(`Polynomial degree: ${degree}`);
+        return degree;
+    }
 }
