@@ -52,6 +52,27 @@ class PolynomialSolver {
         this.terms = [...lhsTerms, ...rhsTerms];
 
         // Combine like terms
-        
+        this.reduceEquation();
     }
+
+        // Reduce the equation to its simplified form
+        reduceEquation(): void {
+            const reducedTerms: { [exponent: number]: number } = {};
+    
+            this.terms.forEach((term) => {
+                if (reducedTerms[term.exponent] !== undefined) {
+                    reducedTerms[term.exponent] += term.coefficient;
+                } else {
+                    reducedTerms[term.exponent] = term.coefficient;
+                }
+            });
+    
+            this.terms = Object.keys(reducedTerms)
+                .map((exp) => ({
+                    coefficient: reducedTerms[parseInt(exp)],
+                    exponent: parseInt(exp),
+                }))
+                .filter((term) => term.coefficient !== 0 || term.exponent === 0);
+    
+        }
 }
