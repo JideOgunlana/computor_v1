@@ -123,7 +123,19 @@ class PolynomialSolver {
 
     // degree - 1
     solveLinear(): void {
+        const a = this.terms.find((term) => term.exponent === 1)?.coefficient || 0;
+        const b = this.terms.find((term) => term.exponent === 0)?.coefficient || 0;
 
+        if (a === 0) {
+            if (b === 0) {
+                console.log("Each real number is a solution.");
+            } else {
+                console.log("No solution exists.");
+            }
+        } else {
+            const solution = -b / a;
+            console.log(`The solution is: ${solution}`);
+        }
     }
 
     // degree - 2
