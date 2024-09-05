@@ -99,4 +99,40 @@ class PolynomialSolver {
         console.log(`Polynomial degree: ${degree}`);
         return degree;
     }
+
+    // Solve the equation based on the degree
+    solveEquation(): void {
+        const degree = this.getDegree();
+
+        if (degree > 2) {
+            console.log("The polynomial degree is strictly greater than 2, I can't solve.");
+            return;
+        }
+
+        switch (degree) {
+            case 1:
+                this.solveLinear();
+                break;
+            case 2:
+                this.solveQuadratic();
+                break;
+            default:
+                this.solveZeroDegree();
+        }
+    }
+
+    // degree - 1
+    solveLinear(): void {
+
+    }
+
+    // degree - 2
+    solveQuadratic(): void {
+
+    }
+
+    // zero degree equation
+    solveZeroDegree(): void {
+
+    }
 }
