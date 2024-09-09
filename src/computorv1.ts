@@ -140,11 +140,40 @@ class PolynomialSolver {
 
     // degree - 2
     solveQuadratic(): void {
+        const a = this.terms.find((term) => term.exponent === 2)?.coefficient || 0;
+        const b = this.terms.find((term) => term.exponent === 1)?.coefficient || 0;
+        const c = this.terms.find((term) => term.exponent === 0)?.coefficient || 0;
 
+        const discriminant = b * b - 4 * a * c;
+        console.log(`Discriminant: ${discriminant}`);
+
+        if (discriminant > 0) {
+            const solution1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+            const solution2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+            console.log("Discriminant is strictly positive, the two solutions are:");
+            console.log(solution1);
+            console.log(solution2);
+        } else if (discriminant === 0) {
+            const solution = -b / (2 * a);
+            console.log("Discriminant is zero, the solution is:");
+            console.log(solution);
+        } else {
+            const realPart = -b / (2 * a);
+            const imaginaryPart = Math.sqrt(-discriminant) / (2 * a);
+            console.log("Discriminant is negative, the two complex solutions are:");
+            console.log(`${realPart} + ${imaginaryPart}i`);
+            console.log(`${realPart} - ${imaginaryPart}i`);
+        }
     }
 
     // zero degree equation
     solveZeroDegree(): void {
+        const constant = this.terms.find((term) => term.exponent === 0)?.coefficient || 0;
 
+        if (constant === 0) {
+            console.log("Each real number is a solution.");
+        } else {
+            console.log("No solution exists.");
+        }
     }
 }
