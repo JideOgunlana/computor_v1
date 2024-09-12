@@ -1,30 +1,57 @@
 type Term = {
     coefficient: number;
     exponent: number;
-}
+};
 
-class PolynomialSolver {
+export class PolynomialSolver {
     private equation: string;
     private terms: Term[];
 
     constructor(equation: string) {
         this.equation = equation;
         this.terms = [];
+        this.validateEquation();  // Validate equation on instantiation
+        this.parseEquation();     // Parse equation if valid
     }
 
-    
+    // Validate the format of the polynomial equation
+    private validateEquation(): void {
+        // Regular expression to match terms of the form coefficient * X^n
+        const termPattern = /^\s*(-?\d+(\.\d+)?)\s*\*\s*X\^(-?\d+)\s*$/;
+        const sides = this.equation.split('=');
+        
+        if (sides.length !== 2) {
+            throw new Error("Equation must contain exactly one '=' symbol.");
+        }
+
+        const [lhs, rhs] = sides.map(side => side.trim());
+
+        const validateSide = (side: string): boolean => {
+            const terms = side.split(/(\+|\-)/).filter(term => term.trim() !== "");
+            for (let i = 0; i < terms.length; i += 2) {
+                const term = terms[i].trim();
+                if (!termPattern.test(term)) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        if (!validateSide(lhs) || !validateSide(rhs)) {
+            throw new Error("Equation is not valid: All terms must be in the form 'coefficient * X^n'.");
+        }
+    }
+
     // Parse the input equation and return the terms
-    parseEquation(): void {
+    private parseEquation(): void {
         let [lhs, rhs] = this.equation.split("=");
         if (!lhs || !rhs) throw new Error("Equation is not valid: missing '=' symbol.");
 
         const parseSide = (side: string): Term[] => {
-            // enforce the format "coefficient * X^exponent"
             const regex = /([+-]?\s*\d*\.?\d+)\s*\*\s*X\^(\d+)/g;
             let terms: Term[] = [];
             let match;
 
-            // While there are matches in the side (lhs or rhs)
             while ((match = regex.exec(side)) !== null) {
                 let coefficient = parseFloat(match[1]?.replace(/\s+/g, "") || "1");
                 let exponent = parseInt(match[2], 10);
@@ -35,7 +62,6 @@ class PolynomialSolver {
                 terms.push({ coefficient, exponent });
             }
 
-            // If no valid matches found, the side has invalid format
             if (terms.length === 0)
                 throw new Error("Equation is not valid: All terms must be in the form 'coefficient * X^n'.");
 
@@ -43,8 +69,7 @@ class PolynomialSolver {
         };
 
         const lhsTerms = parseSide(lhs);
-        if (rhs.trim() === '0') rhs = '0 * X^0';
-        const rhsTerms = parseSide(rhs).map((term) => ({
+        const rhsTerms = parseSide(rhs).map(term => ({
             coefficient: -term.coefficient,
             exponent: term.exponent,
         }));
@@ -56,10 +81,10 @@ class PolynomialSolver {
     }
 
     // Reduce the equation to its simplified form
-    reduceEquation(): void {
+    private reduceEquation(): void {
         const reducedTerms: { [exponent: number]: number } = {};
 
-        this.terms.forEach((term) => {
+        this.terms.forEach(term => {
             if (reducedTerms[term.exponent] !== undefined) {
                 reducedTerms[term.exponent] += term.coefficient;
             } else {
@@ -68,19 +93,19 @@ class PolynomialSolver {
         });
 
         this.terms = Object.keys(reducedTerms)
-            .map((exp) => ({
+            .map(exp => ({
                 coefficient: reducedTerms[parseInt(exp)],
                 exponent: parseInt(exp),
             }))
-            .filter((term) => term.coefficient !== 0 || term.exponent === 0);
+            .filter(term => term.coefficient !== 0 || term.exponent === 0);
 
         this.printReducedForm();
     }
 
     // Print the reduced form of the equation
-    printReducedForm(): void {
+    private printReducedForm(): void {
         const reducedForm = this.terms
-            .map((term) => {
+            .map(term => {
                 const sign = term.coefficient < 0 ? "-" : "+";
                 const absCoefficient = Math.abs(term.coefficient);
                 return `${sign} ${absCoefficient} * X^${term.exponent}`;
@@ -90,12 +115,12 @@ class PolynomialSolver {
             .trim()
             .replace(/^\+/, ""); // Remove leading +
 
-        console.log(`Reduced form: ${reducedForm || "0"} = 0`);
+        console.log(`Reduced form:${reducedForm || "0"} = 0`);
     }
 
     // Find the degree of the polynomial
     getDegree(): number {
-        const degree = Math.max(...this.terms.map((term) => term.exponent));
+        const degree = Math.max(...this.terms.map(term => term.exponent));
         console.log(`Polynomial degree: ${degree}`);
         return degree;
     }
@@ -122,9 +147,9 @@ class PolynomialSolver {
     }
 
     // degree - 1
-    solveLinear(): void {
-        const a = this.terms.find((term) => term.exponent === 1)?.coefficient || 0;
-        const b = this.terms.find((term) => term.exponent === 0)?.coefficient || 0;
+    private solveLinear(): void {
+        const a = this.terms.find(term => term.exponent === 1)?.coefficient || 0;
+        const b = this.terms.find(term => term.exponent === 0)?.coefficient || 0;
 
         if (a === 0) {
             if (b === 0) {
@@ -139,10 +164,10 @@ class PolynomialSolver {
     }
 
     // degree - 2
-    solveQuadratic(): void {
-        const a = this.terms.find((term) => term.exponent === 2)?.coefficient || 0;
-        const b = this.terms.find((term) => term.exponent === 1)?.coefficient || 0;
-        const c = this.terms.find((term) => term.exponent === 0)?.coefficient || 0;
+    private solveQuadratic(): void {
+        const a = this.terms.find(term => term.exponent === 2)?.coefficient || 0;
+        const b = this.terms.find(term => term.exponent === 1)?.coefficient || 0;
+        const c = this.terms.find(term => term.exponent === 0)?.coefficient || 0;
 
         const discriminant = b * b - 4 * a * c;
         console.log(`Discriminant: ${discriminant}`);
@@ -167,8 +192,8 @@ class PolynomialSolver {
     }
 
     // zero degree equation
-    solveZeroDegree(): void {
-        const constant = this.terms.find((term) => term.exponent === 0)?.coefficient || 0;
+    private solveZeroDegree(): void {
+        const constant = this.terms.find(term => term.exponent === 0)?.coefficient || 0;
 
         if (constant === 0) {
             console.log("Each real number is a solution.");
