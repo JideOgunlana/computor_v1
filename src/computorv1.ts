@@ -159,7 +159,7 @@ export class PolynomialSolver {
             }
         } else {
             const solution = -b / a;
-            console.log(`The solution is: ${solution}`);
+            console.log(`The solution is: ${solution.toFixed(6)}`);
         }
     }
 
@@ -176,18 +176,18 @@ export class PolynomialSolver {
             const solution1 = (-b + Math.sqrt(discriminant)) / (2 * a);
             const solution2 = (-b - Math.sqrt(discriminant)) / (2 * a);
             console.log("Discriminant is strictly positive, the two solutions are:");
-            console.log(solution1);
-            console.log(solution2);
+            console.log(solution1.toFixed(6));
+            console.log(solution2.toFixed(6));
         } else if (discriminant === 0) {
             const solution = -b / (2 * a);
             console.log("Discriminant is zero, the solution is:");
-            console.log(solution);
+            console.log(solution.toFixed(6));
         } else {
             const realPart = -b / (2 * a);
             const imaginaryPart = Math.sqrt(-discriminant) / (2 * a);
             console.log("Discriminant is negative, the two complex solutions are:");
-            console.log(`${realPart} + ${imaginaryPart}i`);
-            console.log(`${realPart} - ${imaginaryPart}i`);
+            console.log(`${realPart.toFixed(6)} + ${imaginaryPart.toFixed(6)}i`);
+            console.log(`${realPart.toFixed(6)} - ${imaginaryPart.toFixed(6)}i`);
         }
     }
 
