@@ -14,7 +14,9 @@ export class PolynomialSolver {
         this.parseEquation();     // Parse equation if valid
     }
 
-    // Validate the format of the polynomial equation
+    /**
+     * Validate the format of the polynomial equation
+    */
     private validateEquation(): void {
         // Regular expression to match terms of the form coefficient * X^n
         const termPattern = /^\s*(-?\d+(\.\d+)?)\s*\*\s*X\^(-?\d+)\s*$/;
@@ -42,7 +44,9 @@ export class PolynomialSolver {
         }
     }
 
-    // Parse the input equation and return the terms
+   /**
+    * Parse the input equation and return the terms
+    */
     private parseEquation(): void {
         let [lhs, rhs] = this.equation.split("=");
         if (!lhs || !rhs) throw new Error("Equation is not valid: missing '=' symbol.");
@@ -80,7 +84,9 @@ export class PolynomialSolver {
         this.reduceEquation();
     }
 
-    // Reduce the equation to its simplified form
+    /**
+     * Reduce the equation to its simplified form
+     */
     private reduceEquation(): void {
         const reducedTerms: { [exponent: number]: number } = {};
 
@@ -102,7 +108,9 @@ export class PolynomialSolver {
         this.printReducedForm();
     }
 
-    // Print the reduced form of the equation
+    /**
+     * Print the reduced form of the equation
+     */
     private printReducedForm(): void {
         const reducedForm = this.terms
             .map(term => {
@@ -118,14 +126,21 @@ export class PolynomialSolver {
         console.log(`Reduced form:${reducedForm || "0"} = 0`);
     }
 
-    // Find the degree of the polynomial
+    /**
+     * Find the degree of the polynomial
+     * @returns polynomial degree
+     */
     getDegree(): number {
         const degree = Math.max(...this.terms.map(term => term.exponent));
         console.log(`Polynomial degree: ${degree}`);
         return degree;
     }
 
-    // Solve the equation based on the degree
+
+    /**
+     * Solve the equation based on the degree
+     * @returns void
+     */
     solveEquation(): void {
         const degree = this.getDegree();
 
