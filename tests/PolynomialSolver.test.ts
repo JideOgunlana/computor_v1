@@ -36,7 +36,8 @@ describe("PolynomialSolver Tests", () => {
 
         expect(mockConsoleLog).toHaveBeenCalledWith("Reduced form: 5 * X^0 + 4 * X^1 = 0");
         expect(mockConsoleLog).toHaveBeenCalledWith("Polynomial degree: 1");
-        expect(mockConsoleLog).toHaveBeenCalledWith("The solution is: -1.25");
+        expect(mockConsoleLog).toHaveBeenCalledWith("The solution is:");
+        expect(mockConsoleLog).toHaveBeenCalledWith("-1.25")
     });
 
     test("Solves quadratic equation with positive discriminant (degree 2)", () => {

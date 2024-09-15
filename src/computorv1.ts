@@ -195,7 +195,8 @@ export class PolynomialSolver {
             }
         } else {
             const solution = -b / a;
-            console.log(`The solution is: ${this.formatNumber(solution)}`);
+            console.log("The solution is:");
+            console.log(this.formatNumber(solution))
         }
     }
 
