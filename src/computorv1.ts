@@ -20,6 +20,11 @@ export class PolynomialSolver {
     private validateEquation(): void {
         // Regular expression to match terms of the form coefficient * X^n
         const termPattern = /^\s*(-?\d+(\.\d+)?)\s*\*\s*X\^(-?\d+)\s*$/;
+
+        if (this.equation.startsWith('"') && this.equation.endsWith('"')) {
+            this.equation = this.equation.slice(1, -1);
+        }
+        
         const sides = this.equation.split('=');
         
         if (sides.length !== 2) {
@@ -116,7 +121,7 @@ export class PolynomialSolver {
             .map(term => {
                 const sign = term.coefficient < 0 ? "-" : "+";
                 const absCoefficient = Math.abs(term.coefficient);
-                return `${sign} ${absCoefficient} * X^${term.exponent}`;
+                return `${sign} ${this.formatNumber(absCoefficient)} * X^${term.exponent}`;
             })
             .join(" ")
             .replace(/\+ -/g, "- ")
@@ -127,6 +132,23 @@ export class PolynomialSolver {
     }
 
     /**
+     * Format number to use 6 decimal places only if necessary
+     * @param number The number to format
+     * @returns The formatted number as a string
+     */
+    private formatNumber(number: number): string {
+        const str = number.toString();
+        const [integer, decimal] = str.split(".");
+
+        if (!decimal || decimal.length <= 6) {
+            return str;
+        }
+
+        return number.toFixed(6);
+    }
+
+
+    /**
      * Find the degree of the polynomial
      * @returns polynomial degree
      */
@@ -135,7 +157,6 @@ export class PolynomialSolver {
         console.log(`Polynomial degree: ${degree}`);
         return degree;
     }
-
 
     /**
      * Solve the equation based on the degree
@@ -174,7 +195,7 @@ export class PolynomialSolver {
             }
         } else {
             const solution = -b / a;
-            console.log(`The solution is: ${solution.toFixed(6)}`);
+            console.log(`The solution is: ${this.formatNumber(solution)}`);
         }
     }
 
@@ -185,24 +206,24 @@ export class PolynomialSolver {
         const c = this.terms.find(term => term.exponent === 0)?.coefficient || 0;
 
         const discriminant = b * b - 4 * a * c;
-        console.log(`Discriminant: ${discriminant}`);
+        console.log(`Discriminant: ${this.formatNumber(discriminant)}`);
 
         if (discriminant > 0) {
             const solution1 = (-b + Math.sqrt(discriminant)) / (2 * a);
             const solution2 = (-b - Math.sqrt(discriminant)) / (2 * a);
             console.log("Discriminant is strictly positive, the two solutions are:");
-            console.log(solution1.toFixed(6));
-            console.log(solution2.toFixed(6));
+            console.log(this.formatNumber(solution1));
+            console.log(this.formatNumber(solution2));
         } else if (discriminant === 0) {
             const solution = -b / (2 * a);
             console.log("Discriminant is zero, the solution is:");
-            console.log(solution.toFixed(6));
+            console.log(this.formatNumber(solution));
         } else {
             const realPart = -b / (2 * a);
             const imaginaryPart = Math.sqrt(-discriminant) / (2 * a);
             console.log("Discriminant is negative, the two complex solutions are:");
-            console.log(`${realPart.toFixed(6)} + ${imaginaryPart.toFixed(6)}i`);
-            console.log(`${realPart.toFixed(6)} - ${imaginaryPart.toFixed(6)}i`);
+            console.log(`${this.formatNumber(realPart)} + ${this.formatNumber(imaginaryPart)}i`);
+            console.log(`${this.formatNumber(realPart)} - ${this.formatNumber(imaginaryPart)}i`);
         }
     }
 

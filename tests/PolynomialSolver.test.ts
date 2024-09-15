@@ -47,8 +47,8 @@ describe("PolynomialSolver Tests", () => {
         expect(mockConsoleLog).toHaveBeenCalledWith("Polynomial degree: 2");
         expect(mockConsoleLog).toHaveBeenCalledWith("Discriminant: 4");
         expect(mockConsoleLog).toHaveBeenCalledWith("Discriminant is strictly positive, the two solutions are:");
-        expect(mockConsoleLog).toHaveBeenCalledWith(1);
-        expect(mockConsoleLog).toHaveBeenCalledWith(-1);
+        expect(mockConsoleLog).toHaveBeenCalledWith("1");
+        expect(mockConsoleLog).toHaveBeenCalledWith("-1");
     });
 
     test("Solves quadratic equation with zero discriminant", () => {
@@ -59,7 +59,7 @@ describe("PolynomialSolver Tests", () => {
         expect(mockConsoleLog).toHaveBeenCalledWith("Polynomial degree: 2");
         expect(mockConsoleLog).toHaveBeenCalledWith("Discriminant: 0");
         expect(mockConsoleLog).toHaveBeenCalledWith("Discriminant is zero, the solution is:");
-        expect(mockConsoleLog).toHaveBeenCalledWith(-1);
+        expect(mockConsoleLog).toHaveBeenCalledWith("-1");
     });
 
     test("Solves quadratic equation with negative discriminant (complex solutions)", () => {
