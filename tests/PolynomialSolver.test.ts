@@ -1,4 +1,4 @@
-import { PolynomialSolver } from "../src/computorv1";
+import { PolynomialSolver } from "../src/polynomialSolver";
 
 // Mock console.log for capturing output
 const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
